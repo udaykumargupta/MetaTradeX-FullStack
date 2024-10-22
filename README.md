@@ -5,7 +5,17 @@ MetaTradeX is a cryptocurrency trading platform designed to allow users to buy a
 ## Comprehensive Feature Set
 
 ### AI Chat Bot
-Leverage our AI Chat Bot, designed to handle crypto-related queries like the value of cryptocurrencies and market data using the Gemini API and CoinGecko API for real-time data.
+Leverage our AI Chat Bot, designed to handle crypto-related queries such as cryptocurrency values and market data using the Gemini API and CoinGecko API for real-time information.
+
+### Live Cryptocurrency Data
+Access dynamic live data for cryptocurrencies, including:
+- **Current Price:** Real-time updates on coin prices.
+- **Price Change (Last 24 Hours):** Track daily fluctuations in price.
+- **Market Cap:** Up-to-date market capitalization figures.
+- **Volume (Last 24 Hours):** Monitor trading volume over the past day.
+- **Circulating Supply:** Current amount of coins available in circulation.
+- **Total Supply:** Total number of coins that will ever exist.
+- **Dynamic Price Change Graph:** Visual representation of price changes over time, helping users to analyze trends.
 
 ### Buy & Sell Crypto
 Facilitate smooth crypto transactions with a user-friendly buy and sell interface, supporting a wide array of cryptocurrencies.
@@ -25,6 +35,7 @@ Equip your users with robust portfolio management tools to monitor investments a
 
 ### Robust Authentication and Security
 Ensure top-notch security with features like:
+- **JWT Token Authentication:** Secure user authentication using JSON Web Tokens for enhanced security.
 - **Login & Register:** Simple and secure user authentication.
 - **Two-Factor Authentication:** Extra layer of security for user accounts.
 - **Forgot Password:** Easy password recovery process.
