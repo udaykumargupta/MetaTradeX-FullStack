@@ -1,0 +1,12 @@
+.authContainer{
+    background-image: url("https://t4.ftcdn.net/jpg/04/26/60/79/360_F_426607986_cSvQ1iGMFTSWu3Jmc38c2riYSZxq91Gb.jpg");
+    height:100vh;
+    width:100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+
+}
+.bgBlure{
+    backdrop-filter: blure("10px");
+}
