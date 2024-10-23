@@ -63,3 +63,7 @@ Ensure top-notch security with features like:
 ### APIs
 - Gemini API
 - CoinGecko API
+
+### Tools Used
+- **IDE:** VS Code, IntelliJ
+- **API Testing:** Postman
