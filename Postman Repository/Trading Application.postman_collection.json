@@ -1,0 +1,549 @@
+{
+	"info": {
+		"_postman_id": "09454850-eb66-498f-a9f6-0a78c9a6959e",
+		"name": "Trading Application",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37130526"
+	},
+	"item": [
+		{
+			"name": "Auth Controller",
+			"item": [
+				{
+					"name": "signup",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "// {\r\n//     \"fullName\":\"utsav\",\r\n//     \"email\":\"utsavgupta893@gmail.com\",\r\n//     \"password\":\"1234\"\r\n// }\r\n\r\n{\r\n    \"fullName\":\"simmi\",\r\n    \"email\":\"simmigupta893@gmail.com\",\r\n    \"password\":\"1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5454/auth/signup",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5454",
+							"path": [
+								"auth",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "signin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"utsavgupta893@gmail.com\",\r\n    \"password\":\"1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5454/auth/signin",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5454",
+							"path": [
+								"auth",
+								"signin"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User Controller",
+			"item": [
+				{
+					"name": "User profile by jwt",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Coin Controller",
+			"item": [
+				{
+					"name": "get coins",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "find coin details",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "market chart data",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "get top 50 coin",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "trading coin",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "watchlist controller",
+			"item": [
+				{
+					"name": "watchlist",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "add to watchlist",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5454/api/watchlist/add/coin/bitcoin",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5454",
+							"path": [
+								"api",
+								"watchlist",
+								"add",
+								"coin",
+								"bitcoin"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "wallet controller",
+			"item": [
+				{
+					"name": "get wallet",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "deposit",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5454/api/wallet/deposit?order_id=252&payment_id=pay_PAIy1CvwguKACb",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5454",
+							"path": [
+								"api",
+								"wallet",
+								"deposit"
+							],
+							"query": [
+								{
+									"key": "order_id",
+									"value": "252"
+								},
+								{
+									"key": "payment_id",
+									"value": "pay_PAIy1CvwguKACb"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "transfer money",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"amount\":\"20\",\r\n    \"purpose\":\"gift\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5454/api/wallet/53/transfer",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5454",
+							"path": [
+								"api",
+								"wallet",
+								"53",
+								"transfer"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Payment Controller",
+			"item": [
+				{
+					"name": "payment gateway",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5454/api/payment/RAZORPAY/amount/10000",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5454",
+							"path": [
+								"api",
+								"payment",
+								"RAZORPAY",
+								"amount",
+								"10000"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "order controller",
+			"item": [
+				{
+					"name": "buy coin or sell",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"coinId\":\"bitcoin\",\r\n    \"quantity\":\"0.000001\",\r\n    \"orderType\":\"BUY\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5454/api/order/pay",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5454",
+							"path": [
+								"api",
+								"order",
+								"pay"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get user orders",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Asset controller",
+			"item": [
+				{
+					"name": "get all asset",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "payment details controller",
+			"item": [
+				{
+					"name": "get users payment-details",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "add payment details'",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"accountNumber\":\"12345678912\",\r\n    \"accountHolderName\":\"utsav gupta\",\r\n    \"ifsc\":\"sbi001\",\r\n    \"bankName\":\"sbi\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5454/api/payment-details",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5454",
+							"path": [
+								"api",
+								"payment-details"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Wallet Transaction",
+			"item": [
+				{
+					"name": "get wallet transaction",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Withdrawal controller",
+			"item": [
+				{
+					"name": "withdrawal request",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5454/api/withdrawal/20",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5454",
+							"path": [
+								"api",
+								"withdrawal",
+								"20"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get user withdrawal history'",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Chat Bot",
+			"item": [
+				{
+					"name": "coin details",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"prompt\":\"what is the current value of bitcoin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5454/ai/chat",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5454",
+							"path": [
+								"ai",
+								"chat"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "simple chat",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"prompt\":\"what is the capital of India\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5454/ai/chat/simple",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5454",
+							"path": [
+								"ai",
+								"chat",
+								"simple"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
