@@ -44,7 +44,7 @@ Ensure top-notch security with features like:
 
 ### Backend
 - **Framework:** Spring Boot
-- **Database:** MySQL
+- **Database:** PostgreSQL
 - **Security:** Spring Security
 - **Email:** Java Mail Sender
 
