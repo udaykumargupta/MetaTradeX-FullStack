@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react'
-import { Avatar, AvatarImage } from '@/components/ui/avatar'
+import  { useEffect } from 'react'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { useDispatch, useSelector } from 'react-redux';
 import { getWithdrawalHistory } from '@/State/Withdrawal/Action';
