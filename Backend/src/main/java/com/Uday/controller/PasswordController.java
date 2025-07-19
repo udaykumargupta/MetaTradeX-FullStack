@@ -64,7 +64,7 @@ public class PasswordController {
 
     @PostMapping("/password/reset")
     public ResponseEntity<ApiResponse> resetPassword(
-            @RequestBody ResetPasswordRequest req) throws Exception { 
+            @RequestBody ResetPasswordRequest req) throws Exception {
 
         // Find the token by the OTP, not the user
         ForgotPasswordToken token = forgotPasswordService.findByOtp(req.getOtp());
