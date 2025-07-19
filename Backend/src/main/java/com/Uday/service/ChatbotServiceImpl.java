@@ -12,7 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
+import org.springframework.cache.annotation.Cacheable;
 import java.util.Map;
 
 @Service
@@ -41,7 +41,7 @@ public class ChatbotServiceImpl implements ChatbotService {
             throw new IllegalArgumentException("unsupported type" + value.getClass().getName());
         }
     }
-
+    @Cacheable(value = "coinData", key = "#currencyName")
     public CoinDto makeApiRequest(String currencyName) throws Exception {
         String url = "https://api.coingecko.com/api/v3/coins/"+currencyName;
 
