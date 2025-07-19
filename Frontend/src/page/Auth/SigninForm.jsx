@@ -13,9 +13,8 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const SigninForm = () => {
-
-  const dispatch=useDispatch()
-  const navigate=useNavigate()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const form = useForm({
     resolver: "",
     defaultValues: {
@@ -25,7 +24,7 @@ const SigninForm = () => {
     },
   });
   const onSubmit = (data) => {
-    dispatch(login({data,navigate}))
+    dispatch(login({ data, navigate }));
     console.log(data);
   };
   return (
@@ -38,7 +37,6 @@ const SigninForm = () => {
             name="email"
             render={({ field }) => (
               <FormItem>
-                
                 <FormControl>
                   <Input
                     className="border w-full border-gray-700 p-5"
@@ -56,7 +54,6 @@ const SigninForm = () => {
             name="password"
             render={({ field }) => (
               <FormItem>
-                
                 <FormControl>
                   <Input
                     className="border w-full border-gray-700 p-5"
@@ -67,11 +64,10 @@ const SigninForm = () => {
                 <FormMessage />
               </FormItem>
             )}
-          />  
-            <Button type="submit" className="w-full py-5">
-              Submit
-            </Button>
-        
+          />
+          <Button type="submit" className="w-full py-5">
+            Submit
+          </Button>
         </form>
       </Form>
     </div>

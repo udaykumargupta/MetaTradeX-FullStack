@@ -3,10 +3,8 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-
   FormField,
   FormItem,
-
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -16,7 +14,7 @@ import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 
 const SignupForm = () => {
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
   const form = useForm({
     resolver: "",
     defaultValue: {
@@ -26,7 +24,7 @@ const SignupForm = () => {
     },
   });
   const onSubmit = (data) => {
-    dispatch(register(data))
+    dispatch(register(data));
     console.log(data);
   };
   return (
@@ -39,7 +37,6 @@ const SignupForm = () => {
             name="fullName"
             render={({ field }) => (
               <FormItem>
-                
                 <FormControl>
                   <Input
                     className="border w-full border-gray-700 p-5"
@@ -57,7 +54,6 @@ const SignupForm = () => {
             name="email"
             render={({ field }) => (
               <FormItem>
-                
                 <FormControl>
                   <Input
                     className="border w-full border-gray-700 p-5"
@@ -75,7 +71,6 @@ const SignupForm = () => {
             name="password"
             render={({ field }) => (
               <FormItem>
-                
                 <FormControl>
                   <Input
                     className="border w-full border-gray-700 p-5"
@@ -86,11 +81,10 @@ const SignupForm = () => {
                 <FormMessage />
               </FormItem>
             )}
-          />  
-            <Button type="submit" className="w-full py-5">
-              Submit
-            </Button>
-        
+          />
+          <Button type="submit" className="w-full py-5">
+            Submit
+          </Button>
         </form>
       </Form>
     </div>

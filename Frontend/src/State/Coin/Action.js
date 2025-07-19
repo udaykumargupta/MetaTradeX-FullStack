@@ -24,8 +24,8 @@ import api, { API_BASE_URL } from "@/config/api";
 export const getCoinList = (page) => async (dispatch) => {
   dispatch({ type: FETCH_COIN_LIST_REQUEST });
 
-  const baseUrl = "http://localhost:5454";
-
+  const baseUrl = import.meta.env.VITE_API_URL;
+  
   try {
     const { data } = await axios.get(`${baseUrl}/coins?page=${page}`);
 
