@@ -27,6 +27,12 @@ const Home = () => {
   const [inputValue, setInputValue] = useState("");
   const [isBotRelease, setIsBotRelease] = useState(false);
   const { coin } = useSelector((store) => store);
+  const [selectedCoinId, setSelectedCoinId] = useState("bitcoin");
+    const handleCoinClick = (coinId) => {
+    setSelectedCoinId(coinId);
+  };
+  const selectedCoin = coin.coinList.find(item => item.id === selectedCoinId) || 
+                       coin.top50.find(item => item.id === selectedCoinId);
   const chatResponse = useSelector((store) => store.chatbox.response);
   const dispatch = useDispatch();
 
@@ -42,6 +48,24 @@ const Home = () => {
   const handleCategory = (value) => {
     setCategory(value);
     setCurrentPage(1);
+
+    if (value === "TopGainers") {
+      const gainers = getSortedGainers(coin.coinList);
+      if (gainers.length > 0) {
+        setSelectedCoinId(gainers[0].id);
+      }
+    } else if (value === "TopLosers") {
+      const losers = getSortedLosers(coin.coinList);
+      if (losers.length > 0) {
+        setSelectedCoinId(losers[0].id);
+      }
+    } else if (value === "Top50") {
+      // The top50 list is already sorted by market cap from the API
+      if (coin.top50.length > 0) {
+        // Set the chart to the #1 coin (e.g., Bitcoin)
+        setSelectedCoinId(coin.top50[0].id);
+      }
+    }
   };
 
   const handleChange = (e) => {
@@ -149,7 +173,7 @@ const Home = () => {
             </Button>
           </div>
 
-          <AssetTable coin={paginatedData} category={category} />
+          <AssetTable coin={paginatedData} category={category} onCoinClick={handleCoinClick} />
 
           <div className="mt-4">
             <Pagination>
@@ -179,31 +203,38 @@ const Home = () => {
           </div>
         </div>
 
-        <div className="hidden lg:block lg:w-[50%] p-5">
-          <StockChart coinId={"bitcoin"} />
+      <div className="hidden lg:block lg:w-[50%] p-5">
+        
+        {/* Pass the dynamic ID to the chart */}
+        <StockChart coinId={selectedCoinId} />
 
+        {/* Check if selectedCoin exists before trying to render it */}
+        {selectedCoin && (
           <div className="flex gap-5 items-center">
             <div>
               <Avatar>
-                <AvatarImage src="https://coin-images.coingecko.com/coins/images/1/large/bitcoin.png?1696501400" />
+                <AvatarImage src={selectedCoin.image} />
               </Avatar>
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <p>BTC</p>
+                <p>{selectedCoin.symbol.toUpperCase()}</p>
                 <DotIcon className="text-gray-400" />
-                <p className="text-gray-400">Bitcoin</p>
+                <p className="text-gray-400">{selectedCoin.name}</p>
               </div>
               <div className="flex items-end gap-2">
-                <p className="text-xl font-bold">$68297</p>
-                <p className="text-red-600">
-                  <span>-1263477188.32</span>
-                  <span>(-0.09348%)</span>
+                <p className="text-xl font-bold">
+                  ${selectedCoin.current_price.toLocaleString()}
+                </p>
+                <p className={selectedCoin.price_change_percentage_24h > 0 ? "text-green-600" : "text-red-600"}>
+                  <span>{selectedCoin.price_change_24h.toLocaleString()}</span>
+                  <span>({selectedCoin.price_change_percentage_24h.toFixed(2)}%)</span>
                 </p>
               </div>
             </div>
           </div>
-        </div>
+        )}
+      </div>
       </div>
 
       {/* Chat Bot */}

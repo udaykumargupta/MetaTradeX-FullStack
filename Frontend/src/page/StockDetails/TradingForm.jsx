@@ -70,31 +70,41 @@ const TradingForm = () => {
         )}
       </div>
 
-      <div className="flex gap-5 items-center">
-        <div>
-          <Avatar>
-            <AvatarImage
-              src={
-                "https://cdn.pixabay.com/photo/2021/05/24/09/15/ethereum-logo-6278329_960_720.png"
-              }
-            ></AvatarImage>
-          </Avatar>
-        </div>
-        <div>
-          <div className="flex  items-center gap-2">
-            <p>BTC</p>
-            <DotIcon className="text-gray-400"></DotIcon>
-            <p className="text-gray-400">Bitcoin</p>
-          </div>
-          <div className="flex  items-end gap-2">
-            <p className="text-xl font-bold">${coin.coinDetails?.market_data.current_price.usd}</p>
-            <p className="text-red-600">
-              <span>-131342425.434</span>
-              <span>(-0.423443%)</span>
-            </p>
-          </div>
-        </div>
+      {coin.coinDetails && (
+  <div className="flex gap-5 items-center">
+    <div>
+      <Avatar>
+        {/* Use the image from the coinDetails object */}
+        <AvatarImage src={coin.coinDetails.image.large} />
+      </Avatar>
+    </div>
+    <div>
+      <div className="flex items-center gap-2">
+        {/* Use the symbol and name */}
+        <p>{coin.coinDetails.symbol.toUpperCase()}</p>
+        <DotIcon className="text-gray-400" />
+        <p className="text-gray-400">{coin.coinDetails.name}</p>
       </div>
+      <div className="flex items-end gap-2">
+        {/* Use the current price */}
+        <p className="text-xl font-bold">
+          ${coin.coinDetails.market_data.current_price.usd.toLocaleString()}
+        </p>
+        {/* Use price change data and add conditional coloring */}
+        <p
+          className={
+            coin.coinDetails.market_data.price_change_percentage_24h > 0
+              ? "text-green-600"
+              : "text-red-600"
+          }
+        >
+          <span>{coin.coinDetails.market_data.price_change_24h.toLocaleString()}</span>
+          <span>({coin.coinDetails.market_data.price_change_percentage_24h.toFixed(2)}%)</span>
+        </p>
+      </div>
+    </div>
+  </div>
+)}
 
       <div className="flex items-center justify-between">
         <p>Order Type</p>

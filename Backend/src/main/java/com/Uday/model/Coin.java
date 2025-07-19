@@ -27,7 +27,7 @@ public class Coin {
     private double currentPrice;
 
     @JsonProperty("market_cap")
-    private long marketCap;
+    private double marketCap;
 
     @JsonProperty("market_cap_rank")
     private int marketCapRank;
@@ -60,7 +60,7 @@ public class Coin {
     private long circulatingSupply;
 
     @JsonProperty("total_supply")
-    private long totalSupply;
+    private double totalSupply;
 
     @JsonProperty("max_supply")
     private long maxSupply;

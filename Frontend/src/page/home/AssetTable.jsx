@@ -12,7 +12,7 @@ import {
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-const AssetTable = ({ coin, category }) => {
+const AssetTable = ({ coin, category}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

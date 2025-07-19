@@ -81,52 +81,75 @@ public class CoinServiceImp implements CoinService{
     @Override
     @Cacheable(value = "coinDetails", key = "#coinId")
     public String getCoinDetails(String coinId) throws Exception {
-        String url="https://api.coingecko.com/api/v3/coins/"+coinId;
-        RestTemplate restTemplate=new RestTemplate();
+        String url = "https://api.coingecko.com/api/v3/coins/" + coinId;
+        RestTemplate restTemplate = new RestTemplate();
 
-        try{
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
+            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+            JsonNode jsonNode = objectMapper.readTree(response.getBody());
 
-            HttpHeaders headers=new HttpHeaders();
+            Coin coin = coinRepository.findById(coinId).orElse(new Coin());
 
-            HttpEntity<String>entity=new HttpEntity<String>("parameters",headers);
+            // Use .path() for safe navigation
+            coin.setId(jsonNode.path("id").asText());
+            coin.setName(jsonNode.path("name").asText());
+            coin.setSymbol(jsonNode.path("symbol").asText());
+            coin.setImage(jsonNode.path("image").path("large").asText());
 
-            ResponseEntity<String> response=restTemplate.exchange(url, HttpMethod.GET,entity,String.class);
-            JsonNode jsonNode=objectMapper.readTree(response.getBody());
+            JsonNode marketData = jsonNode.path("market_data");
 
-            Coin coin=new Coin();
-            coin.setId(jsonNode.get("id").asText());
-            coin.setName(jsonNode.get("name").asText());
-            coin.setSymbol(jsonNode.get("symbol").asText());
-            coin.setImage(jsonNode.get("image").get("large").asText());
+            // Add checks before getting values to prevent crashes
+            if (!marketData.isMissingNode()) {
+                JsonNode currentNode;
 
-            JsonNode marketData=jsonNode.get("market_data");
+                currentNode = marketData.path("current_price").path("usd");
+                if (!currentNode.isMissingNode()) coin.setCurrentPrice(currentNode.asDouble());
 
-            coin.setCurrentPrice(marketData.get("current_price").get("usd").asDouble());
-            coin.setMarketCap(marketData.get("market_cap").get("usd").asLong());
-            coin.setMarketCapRank(marketData.get("market_cap_rank").asInt());
-            coin.setTotalVolume(marketData.get("total_volume").get("usd").asLong());
-            coin.setHigh24h(marketData.get("high_24h").get("usd").asDouble());
-            coin.setLow24h(marketData.get("low_24h").get("usd").asDouble());
-            coin.setPriceChange24h(marketData.get("price_change_24h").asDouble());
-            coin.setPriceChangePercentage24h(marketData.get("price_change_percentage_24h").asDouble());
-            coin.setMarketCapChange24h(marketData.get("market_cap_change_24h").asLong());
-            coin.setMarketCapChangePercentage24h(marketData.get("market_cap_change_percentage_24h").asLong());
-            coin.setTotalSupply(marketData.get("total_supply").asLong());
+                currentNode = marketData.path("market_cap").path("usd");
+                if (!currentNode.isMissingNode()) coin.setMarketCap(currentNode.asDouble());
+
+                currentNode = marketData.path("market_cap_rank");
+                if (!currentNode.isMissingNode()) coin.setMarketCapRank(currentNode.asInt());
+
+                currentNode = marketData.path("total_volume").path("usd");
+                if (!currentNode.isMissingNode()) coin.setTotalVolume(currentNode.asDouble());
+
+                currentNode = marketData.path("high_24h").path("usd");
+                if (!currentNode.isMissingNode()) coin.setHigh24h(currentNode.asDouble());
+
+                currentNode = marketData.path("low_24h").path("usd");
+                if (!currentNode.isMissingNode()) coin.setLow24h(currentNode.asDouble());
+
+                currentNode = marketData.path("price_change_24h");
+                if (!currentNode.isMissingNode()) coin.setPriceChange24h(currentNode.asDouble());
+
+                currentNode = marketData.path("price_change_percentage_24h");
+                if (!currentNode.isMissingNode()) coin.setPriceChangePercentage24h(currentNode.asDouble());
+
+                currentNode = marketData.path("market_cap_change_24h");
+                if (!currentNode.isMissingNode()) coin.setMarketCapChange24h(currentNode.asDouble());
+
+                currentNode = marketData.path("market_cap_change_percentage_24h");
+                if (!currentNode.isMissingNode()) coin.setMarketCapChangePercentage24h(currentNode.asDouble());
+
+                currentNode = marketData.path("total_supply");
+                if (!currentNode.isMissingNode() && !currentNode.isNull()) {
+                    coin.setTotalSupply(currentNode.asDouble());
+                }
+            }
 
             coinRepository.save(coin);
 
             return response.getBody();
 
-
-        }
-
-        catch (HttpClientErrorException | HttpServerErrorException e){
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
             throw new Exception(e.getMessage());
         }
     }
 
     @Override
-
     public Coin findById(String coinId) throws Exception {
         Optional<Coin>optionalCoin=coinRepository.findById(coinId);
         if(optionalCoin.isEmpty())throw new Exception("coin not found");
