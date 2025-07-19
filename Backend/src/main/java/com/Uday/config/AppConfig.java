@@ -1,6 +1,7 @@
 package com.Uday.config;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,6 +17,10 @@ import java.util.Collections;
 
 @Configuration
 public class AppConfig {
+
+    @Value("${frontend.url}")
+    private String frontendUrl;
+
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
@@ -35,9 +40,7 @@ public class AppConfig {
             public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                 CorsConfiguration cfg=new CorsConfiguration();
                 cfg.setAllowedOrigins(
-                        Arrays.asList("http://localhost:5173",
-                                "http://localhost:3000"
-                                )
+                        Arrays.asList(frontendUrl)
                 );
                 cfg.setAllowedMethods(Collections.singletonList("*"));
                 cfg.setAllowCredentials(true);

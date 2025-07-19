@@ -22,7 +22,6 @@ public class ChatbotController {
     @PostMapping
     public ResponseEntity<ApiResponse>getCoinDetails(@RequestBody PromptBody prompt) throws Exception {
 
-
         ApiResponse response=chatbotService.getCoinDetails(prompt.getPrompt());
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
