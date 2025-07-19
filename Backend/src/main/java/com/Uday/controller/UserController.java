@@ -100,7 +100,7 @@ public class UserController {
         ForgotPasswordToken token=forgotPasswordService.findByUser(user.getId());
 
         if(token==null){
-            token=forgotPasswordService.createToken(user,id, otp, req.getVerificationType(), req.getSendTo());
+            token=forgotPasswordService.createToken(user, otp, req.getVerificationType(), req.getSendTo());
         }
 
         if(req.getVerificationType().equals(VerificationType.EMAIL)){

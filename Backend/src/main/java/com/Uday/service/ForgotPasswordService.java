@@ -6,8 +6,9 @@ import com.Uday.model.User;
 
 public interface ForgotPasswordService {
 
+    ForgotPasswordToken findByOtp(String otp);
     ForgotPasswordToken createToken(User user,
-                                    String id, String otp,
+                                    String otp,
                                     VerificationType verificationType,
                                     String sendTo);
 

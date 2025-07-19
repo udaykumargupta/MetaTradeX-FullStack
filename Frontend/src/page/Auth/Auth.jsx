@@ -15,7 +15,7 @@ const Auth = () => {
           className="bgBlure absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center items-center h-[35rem] w-[30rem] rounded-md z-50 bg-black bg-opacity-50 shadow-2xl shadow-white px-10
         "
         >
-          <h1 className="text-6xl font-bold pb-9">MetaX Trading</h1>
+          <h1 className="text-6xl font-bold pb-9">MetaTradeX</h1>
 
           {location.pathname == "/signup" ? (
             <section className="w-full">
@@ -31,7 +31,6 @@ const Auth = () => {
             <section className="w-full">
               <ForgotPasswordForm></ForgotPasswordForm>
               <div className="flex items-center justify-center mt-2">
-                <span> back to login </span>
                 <Button onClick={() => navigate("/signin")} variant="ghost">
                   signin
                 </Button>

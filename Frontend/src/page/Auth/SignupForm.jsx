@@ -12,9 +12,10 @@ import { register } from "@/State/Auth/Action";
 
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-
+import { useNavigate } from "react-router-dom";
 const SignupForm = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const form = useForm({
     resolver: "",
     defaultValue: {
@@ -26,6 +27,7 @@ const SignupForm = () => {
   const onSubmit = (data) => {
     dispatch(register(data));
     console.log(data);
+    navigate("/");
   };
   return (
     <div className="">
