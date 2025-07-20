@@ -55,6 +55,13 @@ Ensure top-notch security with features like:
 - **HTTP Client:** Axios
 - **Routing:** React-Router-Dom
 - **UI Components:** Shadcn UI
+  
+### Deployment & Infrastructure
+-**Containerization:** Docker
+-**Container Registry:** Docker Hub
+-**Backend Hosting:** Render
+-**Frontend Hosting:** Netlify
+-**Database Hosting:** Neon (PostgreSQL)
 
 ### Payment Gateways
 - Razorpay
