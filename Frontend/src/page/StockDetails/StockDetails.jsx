@@ -2,7 +2,7 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { BookmarkFilledIcon } from "@radix-ui/react-icons";
 import { BookmarkIcon, DotIcon } from "lucide-react";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   Dialog,
@@ -21,9 +21,14 @@ import { addItemToWatchlist, getUserWatchlist } from "@/State/Watchlist/Action";
 import { existInWatchlist } from "@/utils/existInWatchlist";
 
 const StockDetails = () => {
+  const [open, setOpen] = useState(false);
   const { coin, watchlist } = useSelector((store) => store);
   const dispatch = useDispatch();
   const { id } = useParams();
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   useEffect(() => {
     dispatch(
@@ -85,15 +90,17 @@ const StockDetails = () => {
             )}
           </Button>
 
-          <Dialog>
-            <DialogTrigger>
-              <Button size="lg">Trade</Button>
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+              <Button onClick={() => setOpen(true)} size="lg">
+                Trade
+              </Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>How much do you want to spend?</DialogTitle>
               </DialogHeader>
-              <TradingForm></TradingForm>
+              <TradingForm handleClose={handleClose} />
             </DialogContent>
           </Dialog>
         </div>

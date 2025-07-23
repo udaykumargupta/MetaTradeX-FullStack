@@ -21,7 +21,7 @@ const WithdrawalForm = () => {
     <div className=" pt-10 space-y-5">
       <div className="flex justify-between items-center rounded-md bg-slate-900 text-xl font-bold px-5 py-4">
         <p>Available balance</p>
-        <p>$9000</p>
+        <p>${wallet.userWallet?.balance}</p>
       </div>
       <div className="flex flex-col items-center">
         <h1>Enter Withdrawal amount</h1>

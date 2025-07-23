@@ -25,7 +25,7 @@ const Activity = () => {
         <TableHeader>
           <TableRow>
             <TableHead className="py-5">DATE & TIME</TableHead>
-            <TableHead>TRADING pair</TableHead>
+            <TableHead>TRADING PAIR</TableHead>
             <TableHead>BUY PRICE</TableHead>
             <TableHead>SELLING PRICE</TableHead>
             <TableHead>ORDER TYPE</TableHead>
@@ -38,11 +38,11 @@ const Activity = () => {
             <TableRow key={index}>
               <TableCell>
                 <p>{item.timestamp.split("T")[0]}</p>
-
                 <p className="text-gray-400">
-                  <p>{item.timestamp.split("T")[1].split(".")[0]}</p>
+                  {item.timestamp.split("T")[1].split(".")[0]}
                 </p>
               </TableCell>
+
               <TableCell className="font-medium flex items-center gap-2">
                 <Avatar className="-z-50">
                   <AvatarImage src={item.orderItem.coin.image} />
@@ -50,10 +50,19 @@ const Activity = () => {
                 <span>{item.orderItem.coin.name}</span>
               </TableCell>
 
-              <TableCell>${item.orderItem.buyPrice}</TableCell>
-              <TableCell>{item.orderItem.sellPrice}</TableCell>
+             
+              <TableCell>
+                {item.orderType === "BUY" ? `$${item.orderItem.buyPrice}` : "-"}
+              </TableCell>
+              <TableCell>
+                {item.orderType === "SELL"
+                  ? `$${item.orderItem.sellPrice}`
+                  : "-"}
+              </TableCell>
+              
+
               <TableCell>{item.orderType}</TableCell>
-              <TableCell className="">{calculateProfit(item)}</TableCell>
+              <TableCell>{calculateProfit(item)}</TableCell>
               <TableCell className="text-right">{item.price}</TableCell>
             </TableRow>
           ))}

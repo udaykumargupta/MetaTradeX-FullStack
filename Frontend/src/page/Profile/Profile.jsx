@@ -74,14 +74,14 @@ const Profile = () => {
                   <p className="w-[9rem]">Full Name:</p>
                   <p className="text-gray-500">{auth.user?.fullName}</p>
                 </div>
-                <div className="flex">
+                {/* <div className="flex">
                   <p className="w-[9rem]">Date of Birth</p>
                   <p className="text-gray-500">11/04/2004</p>
                 </div>
                 <div className="flex">
                   <p className="w-[9rem]">Nationality</p>
                   <p className="text-gray-500">Indian</p>
-                </div>
+                </div> */}
               </div>
             </div>
           </CardContent>

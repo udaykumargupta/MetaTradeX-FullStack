@@ -34,6 +34,9 @@ public class PaymentServiceImpl implements PaymentService{
     @Value("${razorpay.api.secret}")
     private String apiSecretKey;
 
+    @Value("${frontend.url}")
+    private String frontendBaseUrl;
+
     @Override
     public PaymentOrder createOrder(User user, Long amount, PaymentMethod paymentMethod) {
 
@@ -110,7 +113,7 @@ public class PaymentServiceImpl implements PaymentService{
             paymentLinkRequest.put("reminder_enable",true);
 
             //set hte callback URL and method after successfully payment user will be directed to this link
-            paymentLinkRequest.put("callback_url","http://localhost:5173/wallet?order_id="+ orderId);
+            paymentLinkRequest.put("callback_url", frontendBaseUrl + "/wallet?order_id=" + orderId);
             paymentLinkRequest.put("callback_method","get");
 
             // Create the payment link using paymentLink.create method
@@ -141,8 +144,8 @@ public class PaymentServiceImpl implements PaymentService{
         SessionCreateParams params =SessionCreateParams.builder()
                 .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
                 .setMode(SessionCreateParams.Mode.PAYMENT)
-                .setSuccessUrl("http://localhost:8080/wallet?order_id="+orderId)
-                .setCancelUrl("http://localhost:8080/payment/cancel")
+                .setSuccessUrl(frontendBaseUrl + "/wallet?order_id=" + orderId)
+                .setCancelUrl(frontendBaseUrl + "/payment/cancel")
                 .addLineItem(SessionCreateParams.LineItem.builder()
                         .setQuantity(1L)
                         .setPriceData
@@ -168,7 +171,7 @@ public class PaymentServiceImpl implements PaymentService{
         System.out.println("session______"+session);
 
         PaymentResponse res=new PaymentResponse();
-         res.setPayment_url(session.getUrl());
+        res.setPayment_url(session.getUrl());
         return  res;
     }
 }

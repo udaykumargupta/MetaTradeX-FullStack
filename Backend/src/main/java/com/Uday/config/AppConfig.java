@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
+//This code configures the web security for a Spring Boot application,
+// setting up a stateless, token-based authentication system suitable for a REST API that communicates with a separate frontend.
 @Configuration
 public class AppConfig {
 
@@ -22,6 +24,10 @@ public class AppConfig {
     private String frontendUrl;
 
 
+//    Secures API Endpoints: It ensures that only authenticated users can access any URL starting with /api/.
+//    All other URLs are publicly accessible.
+//    Enables JWT Authentication: It replaces the default session-based security with a stateless approach using JSON Web Tokens (JWT).
+//    This is ideal for microservices and modern frontends.
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http.sessionManagement(management->management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -33,6 +39,8 @@ public class AppConfig {
         return http.build();
     }
 
+//  Configures CORS: It sets up Cross-Origin Resource Sharing (CORS) to allow the frontend application
+//  (running at the URL specified by frontend.url) to make requests to this backend.
     private CorsConfigurationSource corsConfigurationSource() {
 
         return new CorsConfigurationSource() {

@@ -27,7 +27,6 @@ export const getAssetById =
     }
   };
 
-
   export const getAssetDetails =
   ({ coinId, jwt }) =>
   async (dispatch) => {

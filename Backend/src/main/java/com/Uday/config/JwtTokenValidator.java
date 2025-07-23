@@ -18,6 +18,8 @@ import javax.crypto.SecretKey;
 import java.io.IOException;
 import java.util.List;
 
+//This filter, JwtTokenValidator, runs once for every incoming request to check for a valid JWT.
+// If a valid token is found, it authenticates the user for that request.
 public class JwtTokenValidator extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
