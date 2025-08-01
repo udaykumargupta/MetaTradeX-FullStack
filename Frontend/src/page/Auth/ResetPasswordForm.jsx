@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom"; // For routing
+import { API_BASE_URL } from "@/config/api";
 
 const ResetPasswordForm = () => {
   const [loading, setLoading] = useState(false);
@@ -31,7 +32,7 @@ const ResetPasswordForm = () => {
       };
 
       await axios.post(
-        "http://localhost:5454/auth/password/reset",
+        `${API_BASE_URL}/auth/password/reset`,
         requestBody
       );
       

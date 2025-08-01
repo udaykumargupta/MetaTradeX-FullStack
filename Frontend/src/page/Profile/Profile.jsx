@@ -2,12 +2,19 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { VerifiedIcon } from "lucide-react";
 import React, { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import AccountVerificationForm from "./AccountVerificationForm"; // Make sure path is correct
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { getUser } from "@/State/Auth/Action"; // Assuming you have this action
+import { API_BASE_URL } from "@/config/api";
 
 const Profile = () => {
   const { auth } = useSelector((store) => store);
@@ -19,7 +26,7 @@ const Profile = () => {
     try {
       const token = localStorage.getItem("jwt");
       await axios.post(
-        "http://localhost:5454/api/users/verification/EMAIL/send-otp",
+        `${API_BASE_URL}/api/users/verification/EMAIL/send-otp`,
         {}, // Empty body for this POST request
         {
           headers: {
@@ -39,7 +46,7 @@ const Profile = () => {
     try {
       const token = localStorage.getItem("jwt");
       await axios.patch(
-        `http://localhost:5454/api/users/enable-two-factor/verify-otp/${otp}`,
+        `${API_BASE_URL}/api/users/enable-two-factor/verify-otp/${otp}`,
         {}, // Empty body for this PATCH request
         {
           headers: {
@@ -89,27 +96,32 @@ const Profile = () => {
 
         <div className="mt-6">
           <Card className="w-full">
-          <CardHeader className="pb-7">
-            <div className="flex items-center gap-3">
-              <CardTitle>2 Step Verification</CardTitle>
-              
-              {/* Change 'isEnabled' to 'enabled' in this line */}
-              {auth.user?.twoFactorAuth?.enabled ? (
-                <Badge className={"space-x-2 text-white bg-green-600"}>
-                  <VerifiedIcon />
-                  <span>Enabled</span>
-                </Badge>
-              ) : (
-                <Badge className="bg-orange-500">Disabled</Badge>
-              )}
-            </div>
-          </CardHeader>
+            <CardHeader className="pb-7">
+              <div className="flex items-center gap-3">
+                <CardTitle>2 Step Verification</CardTitle>
+
+                {/* Change 'isEnabled' to 'enabled' in this line */}
+                {auth.user?.twoFactorAuth?.enabled ? (
+                  <Badge className={"space-x-2 text-white bg-green-600"}>
+                    <VerifiedIcon />
+                    <span>Enabled</span>
+                  </Badge>
+                ) : (
+                  <Badge className="bg-orange-500">Disabled</Badge>
+                )}
+              </div>
+            </CardHeader>
             <CardContent>
               <div>
                 <Dialog open={open} onOpenChange={setOpen}>
                   <DialogTrigger asChild>
-                    <Button onClick={handleEnableTwoStepVerification} disabled={auth.user?.twoFactorAuth?.isEnabled}>
-                      {auth.user?.twoFactorAuth?.isEnabled ? "2FA Enabled" : "Enable Two Step Verification"}
+                    <Button
+                      onClick={handleEnableTwoStepVerification}
+                      disabled={auth.user?.twoFactorAuth?.enabled}
+                    >
+                      {auth.user?.twoFactorAuth?.enabled
+                        ? "2FA Enabled"
+                        : "Enable Two Step Verification"}
                     </Button>
                   </DialogTrigger>
                   <DialogContent>

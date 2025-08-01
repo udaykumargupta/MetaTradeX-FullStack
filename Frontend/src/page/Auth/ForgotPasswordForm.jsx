@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios"; // Make sure to install axios: npm install axios
+import { API_BASE_URL } from "@/config/api";
 
 const ForgotPasswordForm = () => {
   // State for handling loading, success, and error messages
@@ -32,7 +33,7 @@ const ForgotPasswordForm = () => {
 
       // Replace with your actual backend API URL
       const response = await axios.post(
-        "http://localhost:5454/auth/password/send-otp",
+        `${API_BASE_URL}/auth/password/send-otp`,
         requestBody
       );
       
