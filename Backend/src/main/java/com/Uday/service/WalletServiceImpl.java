@@ -19,67 +19,79 @@ public class WalletServiceImpl implements WalletService{
 
     @Override
     public Wallet getUserWallet(User user) {
-        Wallet wallet=walletRepository.findByUserId(user.getId());
-        if(wallet==null){
-            wallet=new Wallet();
+        Wallet wallet = walletRepository.findByUserId(user.getId());
+        // If a user has no wallet, create one and initialize the balance to zero.
+        if (wallet == null) {
+            wallet = new Wallet();
             wallet.setUser(user);
-            wallet = walletRepository.save(wallet);
+            wallet.setBalance(BigDecimal.ZERO); // Initialize balance to prevent null issues
+            return walletRepository.save(wallet);
         }
         return wallet;
     }
 
     @Override
     public Wallet addBalance(Wallet wallet, Long money) {
+        // THE FIX: Check for a null balance and initialize it to zero if necessary.
+        BigDecimal currentBalance = wallet.getBalance();
+        if (currentBalance == null) {
+            currentBalance = BigDecimal.ZERO;
+        }
 
-        BigDecimal balance=wallet.getBalance();
-        BigDecimal newBalance=balance.add(BigDecimal.valueOf(money));
+        BigDecimal amountToAdd = BigDecimal.valueOf(money);
+        BigDecimal newBalance = currentBalance.add(amountToAdd);
         wallet.setBalance(newBalance);
+
         return walletRepository.save(wallet);
     }
 
     @Override
     public Wallet findWalletById(Long id) throws Exception {
-        Optional<Wallet>wallet=walletRepository.findById(id);
-        if(wallet.isPresent()){
-            return wallet.get();
+        Optional<Wallet> walletOptional = walletRepository.findById(id);
+        if (walletOptional.isPresent()) {
+            return walletOptional.get();
         }
-        throw new Exception("wallet not found");
+        throw new Exception("Wallet not found with id: " + id);
     }
 
     @Override
     public Wallet walletToWalletTransfer(User sender, Wallet receiverWallet, Long amount) throws Exception {
-        Wallet senderWallet=getUserWallet(sender);
+        Wallet senderWallet = getUserWallet(sender);
+        BigDecimal transferAmount = BigDecimal.valueOf(amount);
 
-        if(senderWallet.getBalance().compareTo(BigDecimal.valueOf(amount))<0){
-            throw new Exception("Insufficient balance");
+        if (senderWallet.getBalance().compareTo(transferAmount) < 0) {
+            throw new Exception("Insufficient balance for this transfer.");
         }
-        BigDecimal senderBalance=senderWallet.getBalance().subtract(BigDecimal.valueOf(amount));
-        senderWallet.setBalance(senderBalance);
+
+        // Subtract from sender's wallet
+        BigDecimal newSenderBalance = senderWallet.getBalance().subtract(transferAmount);
+        senderWallet.setBalance(newSenderBalance);
         walletRepository.save(senderWallet);
 
-        BigDecimal receiverBalance=receiverWallet.getBalance().add(BigDecimal.valueOf(amount));
-        receiverWallet.setBalance(receiverBalance);
+        // Add to receiver's wallet
+        BigDecimal newReceiverBalance = receiverWallet.getBalance().add(transferAmount);
+        receiverWallet.setBalance(newReceiverBalance);
         walletRepository.save(receiverWallet);
+
         return senderWallet;
     }
 
     @Override
     public Wallet payOrderPayment(Order order, User user) throws Exception {
-        Wallet wallet=getUserWallet(user);
+        Wallet wallet = getUserWallet(user);
+        BigDecimal orderPrice = order.getPrice();
 
-        if(order.getOrderType().equals(OrderType.BUY)){
-            BigDecimal newBalance=wallet.getBalance().subtract(order.getPrice());
-            if(newBalance.compareTo(order.getPrice())<0){
-                throw new Exception("Insufficient funds for this transaction");
-
+        if (order.getOrderType().equals(OrderType.BUY)) {
+            if (wallet.getBalance().compareTo(orderPrice) < 0) {
+                throw new Exception("Insufficient funds for this transaction.");
             }
+            BigDecimal newBalance = wallet.getBalance().subtract(orderPrice);
+            wallet.setBalance(newBalance);
+        } else { // This is a SELL order
+            BigDecimal newBalance = wallet.getBalance().add(orderPrice);
             wallet.setBalance(newBalance);
         }
-        else {
-            BigDecimal newBalance=wallet.getBalance().add(order.getPrice());
-            wallet.setBalance(newBalance);
-        }
-        walletRepository.save(wallet);
-        return wallet;
+
+        return walletRepository.save(wallet);
     }
 }

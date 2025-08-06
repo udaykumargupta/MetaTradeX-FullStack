@@ -8,13 +8,13 @@ import { useDispatch, useSelector } from "react-redux";
 const WithdrawalForm = () => {
   const [amount, setAmount] = React.useState("");
   const dispatch = useDispatch();
-  const {wallet,withdrawal}=useSelector(store=>store)
+  const { wallet, withdrawal } = useSelector((store) => store);
 
   const handleChange = (e) => {
     setAmount(e.target.value);
   };
-  const handleSubmit=()=>{
-    dispatch(withdrawalRequest({amount,jwt:localStorage.getItem("jwt")}))
+  const handleSubmit = () => {
+    dispatch(withdrawalRequest({ amount, jwt: localStorage.getItem("jwt") }));
     console.log(amount);
   };
   return (
@@ -38,23 +38,30 @@ const WithdrawalForm = () => {
       <div>
         <p className="pb-2">Transfer To</p>
         <div className="flex items-center gap-5 border px-5 py-2 rounded-r-md">
-            <img className="h-7 w-8" src="https://cdn.pixabay.com/photo/2020/02/18/11/03/bank-4859142_640.png" alt=""></img>
-            <div>
-            <p className="text-xl font-bold">{withdrawal.paymentDetails?.bankName}</p>
-            <p className="text-xs">{withdrawal.paymentDetails?.accountNumber
-    ? '*'.repeat(withdrawal.paymentDetails.accountNumber.length - 4) + 
-      withdrawal.paymentDetails.accountNumber.slice(-4)
-    : 'N/A'}</p>
+          <img
+            className="h-7 w-8"
+            src="https://cdn.pixabay.com/photo/2020/02/18/11/03/bank-4859142_640.png"
+            alt=""
+          ></img>
+          <div>
+            <p className="text-xl font-bold">
+              {withdrawal.paymentDetails?.bankName}
+            </p>
+            <p className="text-xs">
+              {withdrawal.paymentDetails?.accountNumber
+                ? "*".repeat(
+                    withdrawal.paymentDetails.accountNumber.length - 4
+                  ) + withdrawal.paymentDetails.accountNumber.slice(-4)
+                : "N/A"}
+            </p>
+          </div>
         </div>
-        </div>
-
       </div>
       <DialogClose className="w-full">
-      <Button onClick={handleSubmit}className="w-full py-7 text-xl">
-        Withdraw
-      </Button>
+        <Button onClick={handleSubmit} className="w-full py-7 text-xl">
+          Withdraw
+        </Button>
       </DialogClose>
-
     </div>
   );
 };

@@ -87,7 +87,7 @@ public class PaymentServiceImpl implements PaymentService{
 
     @Override
     public PaymentResponse createRazorpayPaymentLink(User user, Long amount,Long orderId) throws RazorpayException {
-        Long  Amount= amount*100;
+        Long  newamount= amount*100;
 
         try{
             //Instantiate a Razorpay client with your ID and secret
@@ -95,7 +95,7 @@ public class PaymentServiceImpl implements PaymentService{
 
             //create a JSON object with the payment link request parameters
             JSONObject paymentLinkRequest=new JSONObject();
-            paymentLinkRequest.put("amount",amount);
+            paymentLinkRequest.put("amount",newamount);
             paymentLinkRequest.put("currency","INR");
 
             //create a JSON object with the customer details

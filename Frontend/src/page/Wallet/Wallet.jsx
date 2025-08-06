@@ -21,40 +21,51 @@ import WithdrawalForm from "./WithdrawalForm";
 import TransferForm from "./TransferForm";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useDispatch, useSelector } from "react-redux";
-import { depositMoney, getUserWallet, getWalletTransaction } from "@/State/Wallet/Action";
+import {
+  depositMoney,
+  getUserWallet,
+  getWalletTransaction,
+} from "@/State/Wallet/Action";
 import { useLocation, useNavigate } from "react-router-dom";
 
-function useQuery(){
+function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
 export const Wallet = () => {
   const dispatch = useDispatch();
-  const {wallet}=useSelector(store=>store)
-  const query=useQuery()
-  const orderId=query.get("order_id");
-  const paymentId=query.get("payment_id");
-  const razorpayPaymentId=query.get("razorpay_payment_id")
-  const navigate=useNavigate();
+  const { wallet } = useSelector((store) => store);
+  const query = useQuery();
+  const orderId = query.get("order_id");
+  const paymentId = query.get("payment_id");
+  const razorpayPaymentId = query.get("razorpay_payment_id");
+  const navigate = useNavigate();
   useEffect(() => {
     handleFetchUserWallet();
     handleFetchWalletTransaction();
   }, []);
 
-  useEffect(()=>{
-    if(orderId){
-      dispatch(depositMoney({jwt:localStorage.getItem("jwt"),
-        orderId,
-        paymentId:razorpayPaymentId || paymentId,
-        navigate
-      }))
+  useEffect(() => {
+    if (orderId) {
+      dispatch(
+        depositMoney({
+          jwt: localStorage.getItem("jwt"),
+          orderId,
+          paymentId: razorpayPaymentId || paymentId,
+          navigate,
+        })
+      );
     }
-  },[orderId,paymentId,razorpayPaymentId])
+  }, [orderId, paymentId, razorpayPaymentId]);
   const handleFetchUserWallet = () => {
     dispatch(getUserWallet(localStorage.getItem("jwt")));
   };
-  const handleFetchWalletTransaction=()=>{
-    dispatch(getWalletTransaction({jwt:localStorage.getItem("jwt")}));
-  }
+  const handleFetchWalletTransaction = () => {
+    dispatch(getWalletTransaction({ jwt: localStorage.getItem("jwt") }));
+  };
+  const handleRefresh = () => {
+    console.log("Refreshing wallet and transactions...");
+    handleFetchWalletTransaction();
+  };
   return (
     <div className="flex flex-col items-center">
       <div className="pt-10 w-full lg:w-[60%]">
@@ -66,7 +77,9 @@ export const Wallet = () => {
                 <div>
                   <CardTitle className="text-2xl">My Wallet</CardTitle>
                   <div className="flex items-center gap-2">
-                    <p className="text-gray-200 text-sm">#{wallet.userWallet?.id}</p>
+                    <p className="text-gray-200 text-sm">
+                      #{wallet.userWallet?.id}
+                    </p>
                     <CopyIcon
                       size={13}
                       className="cursor-pointer hover:text-slate-300"
@@ -75,14 +88,19 @@ export const Wallet = () => {
                 </div>
               </div>
               <div>
-                <ReloadIcon onClick={handleFetchUserWallet} className="w-6 h-6 cursor-pointer hover:text-gray-400"></ReloadIcon>
+                <ReloadIcon
+                  onClick={handleFetchUserWallet}
+                  className="w-6 h-6 cursor-pointer hover:text-gray-400"
+                ></ReloadIcon>
               </div>
             </div>
           </CardHeader>
           <CardContent>
             <div className="flex items-center">
               <DollarSign></DollarSign>
-              <span className="text-2xl font-semibold">{wallet.userWallet.balance}</span>
+              <span className="text-2xl font-semibold">
+                {wallet.userWallet.balance}
+              </span>
             </div>
 
             <div className="flex gap-7 mt-5">
@@ -139,31 +157,59 @@ export const Wallet = () => {
         <div className="py-5 pt-10">
           <div className="flex gap-2 items-center pb-5">
             <h1 className="text-2xl font-semibold ">History</h1>
-            <UpdateIcon className="h-7 w-7 p-0 cursor-pointer hover:text-gray-400"></UpdateIcon>
+            <UpdateIcon
+              onClick={handleRefresh}
+              className="h-7 w-7 p-0 cursor-pointer hover:text-gray-400"
+            ></UpdateIcon>
           </div>
           <div className="space-y-5">
-            {wallet.transactions.map((item, i) => (
-              <div key={i}>
-                <Card className=" px-5 flex justify-between items-center p-2">
-                  <div className=" flex items-center gap-5">
-                    <Avatar onClick={handleFetchWalletTransaction}>
-                      <AvatarFallback>
-                        <ShuffleIcon className=""></ShuffleIcon>
-                      </AvatarFallback>
-                    </Avatar>
+            {wallet.transactions.map((item, i) => {
+              // Determine the styling and content based on the transaction type
+              const isCredit =
+                item.type === "ADD_MONEY" || item.type === "DEPOSIT";
 
-                    <div className="space-y-1">
-                      <h1>{item.type || item.purpose}</h1>
-                      <p className="text-sm text-gray-500">{item.data}</p>
-                      <p className="text-sm text-gray-500">{new Date(item.timestamp).toLocaleString() || "Date Not Available"}</p> 
+              return (
+                <div key={i}>
+                  <Card className="px-5 flex justify-between items-center p-2">
+                    <div className="flex items-center gap-5">
+                      {/* Step 1: Use a dynamic icon */}
+                      <Avatar>
+                        <AvatarFallback
+                          className={`${
+                            isCredit ? "text-green-500" : "text-red-500"
+                          }`}
+                        >
+                          {isCredit ? (
+                            <UploadIcon />
+                          ) : item.type === "WITHDRAWAL" ? (
+                            <DownloadIcon />
+                          ) : (
+                            <ShuffleIcon />
+                          )}
+                        </AvatarFallback>
+                      </Avatar>
+
+                      <div className="space-y-1">
+                        <h1>{item.purpose || item.type}</h1>
+                        <p className="text-sm text-gray-500">
+                          {new Date(item.timestamp).toLocaleString()}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                  <div>
-                    <p className={`text-green-500`}>{item.amount}USD</p>
-                  </div>
-                </Card>
-              </div>
-            ))}
+                    <div>
+                      {/* Step 2: Conditionally style amount and add +/- sign */}
+                      <p
+                        className={`text-lg ${
+                          isCredit ? "text-green-500" : "text-red-500"
+                        }`}
+                      >
+                        {isCredit ? `+${item.amount}` : `-${item.amount}`} USD
+                      </p>
+                    </div>
+                  </Card>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
