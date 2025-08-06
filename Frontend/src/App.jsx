@@ -3,7 +3,7 @@ import Home from "./page/home/Home";
 import Navbar from "./page/Navbar/Navbar";
 import Portfolio from "./page/Portfolio/Portfolio";
 import Wallet from "./page/Wallet/Wallet";
-import Withdrawal from "./page/Withdrawal/withdrawal";
+import Withdrawal from "./page/Withdrawal/Withdrawal";
 import PaymentDetails from "./page/PaymentDetails/PaymentDetails";
 import Watchlist from "./page/Watchlist/Watchlist";
 import StockDetails from "./page/StockDetails/StockDetails";
