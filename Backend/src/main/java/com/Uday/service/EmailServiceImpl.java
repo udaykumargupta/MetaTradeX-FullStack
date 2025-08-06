@@ -25,14 +25,24 @@ public class EmailServiceImpl implements EmailService {
         // Use true to indicate multipart message for potential HTML content
         MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, "utf-8");
 
-        String subject = "Your Password Reset OTP";
+        String purpose = "verify your identity";
 
-        String text = "Hi,"
-                + "<p>Thank you for the request to reset your password.</p>"
-                + "<p>Your One Time Password (OTP) for password reset is: <b>" + otp + "</b></p>"
-                + "<p>This OTP is valid for 10 minutes.</p>";
+        String text = "<html>"
+                + "<body style='font-family: sans-serif;'>"
+                + "<h2>Hello!</h2>"
+                + "<p>You've requested a one-time code to **" + purpose + "**.</p>"
+                + "<p style='font-size: 24px; font-weight: bold; background-color: #f2f2f2; padding: 10px; border-radius: 5px; text-align: center;'>"
+                + otp + "</p>"
+                + "<p>This code is valid for **10 minutes**.</p>"
+                + "<p>For your security, please **do not share this code with anyone**.</p>"
+                + "<p>If you did not request this, you can safely ignore this email.</p>"
+                + "<br>"
+                + "<p>Thank you,</p>"
+                + "<p>MetaTradeX-Uday</p>"
+                + "</body>"
+                + "</html>";
 
-        mimeMessageHelper.setSubject(subject);
+        mimeMessageHelper.setSubject(purpose);
 
         mimeMessageHelper.setText(text, true);
         mimeMessageHelper.setTo(email);

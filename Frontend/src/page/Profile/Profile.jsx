@@ -72,15 +72,15 @@ const Profile = () => {
       console.error("Failed to verify OTP", err);
     }
   };
-    const handleDisableTwoFactorAuth = async () => {
-        const token = localStorage.getItem("jwt");
+  const handleDisableTwoFactorAuth = async () => {
+    const token = localStorage.getItem("jwt");
 
-        // 1. Dispatch the disable action and wait for it to complete
-        await dispatch(disableTwoFactorAuth(token));
-        
-        // 2. AFTER it succeeds, dispatch getUser to refresh the UI with the updated user data
-        dispatch(getUser(token));
-    };
+    // 1. Dispatch the disable action and wait for it to complete
+    await dispatch(disableTwoFactorAuth(token));
+
+    // 2. AFTER it succeeds, dispatch getUser to refresh the UI with the updated user data
+    dispatch(getUser(token));
+  };
 
   return (
     <div className="flex flex-col items-center mb-5">

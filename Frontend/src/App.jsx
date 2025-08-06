@@ -17,6 +17,8 @@ import { useEffect } from "react";
 import { getUser } from "./State/Auth/Action";
 import ForgotPasswordForm from "./page/Auth/ForgotPasswordForm";
 import ResetPasswordForm from "./page/Auth/ResetPasswordForm";
+import TwoFactorAuthForm from "./page/Profile/TwoFactorAuthForm";
+
 
 function App() {
   const { auth } = useSelector(store => store);
@@ -54,6 +56,7 @@ function App() {
           <Route path="/" element={<Auth />} />
           <Route path="/forgot-password" element={<ForgotPasswordForm />} />
           <Route path="/reset-password" element={<ResetPasswordForm />} />
+          <Route path="/two-factor-auth" element={<TwoFactorAuthForm />} />
           {/* If a non-logged-in user tries any other URL, show the Auth page */}
           <Route path="*" element={<Auth />} />
         </Routes>

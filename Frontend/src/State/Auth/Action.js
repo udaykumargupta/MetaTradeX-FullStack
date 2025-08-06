@@ -9,6 +9,7 @@ import {
   LOGIN_FAILURE,
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
+  LOGIN_SUCCESS_2FA,
   LOGOUT,
   REGISTER_FAILURE,
   REGISTER_REQUEST,
@@ -45,11 +46,20 @@ export const login = (userData) => async (dispatch) => {
   try {
     const response = await axios.post(`${baseUrl}/auth/signin`, userData.data);
     const user = response.data;
-    console.log(user);
+    console.log("Login response:", user);
 
-    dispatch({ type: LOGIN_SUCCESS, payload: user.jwt });
-    localStorage.setItem("jwt", user.jwt);
-    userData.navigate("/");
+    // This is the new logic to handle 2FA
+    if (user.twoFactorAuthEnabled) {
+      dispatch({ type: LOGIN_SUCCESS_2FA, payload: user.session });
+      // Store the session ID in sessionStorage
+      sessionStorage.setItem("sessionId", user.session);
+      userData.navigate("/two-factor-auth");
+    } else {
+      // If 2FA is disabled, proceed with normal login
+      dispatch({ type: LOGIN_SUCCESS, payload: user.jwt });
+      localStorage.setItem("jwt", user.jwt);
+      userData.navigate("/");
+    }
   } catch (error) {
     dispatch({ type: LOGIN_FAILURE, payload: error.message });
     console.log(error);
@@ -78,20 +88,34 @@ export const getUser = (jwt) => async (dispatch) => {
 };
 
 // Verify OTP for two-factor authentication
-export const verifyOtp = (otp, id) => async (dispatch) => {
+export const verifyOtp = (userData) => async (dispatch) => {
   dispatch({ type: VERIFY_OTP_REQUEST });
   const baseUrl = import.meta.env.VITE_API_URL;
+
   try {
+    // Retrieve the session ID from Redux state or sessionStorage
+    const sessionId = userData.id || sessionStorage.getItem("sessionId");
+    console.log("Session ID retrieved:", sessionId);
+    if (!sessionId) {
+      throw new Error("Session ID is missing. Please log in again.");
+    }
+
     const response = await axios.post(
-      `${baseUrl}/auth/two-factor/otp/${otp}?id=${id}`
+      `${baseUrl}/auth/two-factor/otp/${userData.otp}?id=${sessionId}`
     );
-    dispatch({ type: VERIFY_OTP_SUCCESS, payload: response.data });
-    localStorage.setItem("token", response.data.jwt); // Save JWT to localStorage after successful OTP verification
+
+    const user = response.data;
+
+    dispatch({ type: VERIFY_OTP_SUCCESS, payload: user });
+    localStorage.setItem("jwt", user.jwt);
+    sessionStorage.removeItem("sessionId");
+    userData.navigate("/");
   } catch (error) {
     dispatch({
       type: VERIFY_OTP_FAILURE,
-      payload: error.response.data.message,
+      payload: error.response?.data?.message || error.message,
     });
+    console.log(error);
   }
 };
 
@@ -125,5 +149,6 @@ export const disableTwoFactorAuth = (jwt) => async (dispatch) => {
 
 export const logout = () => (dispatch) => {
   localStorage.clear();
+  sessionStorage.clear();
   dispatch({ type: LOGOUT });
 };
