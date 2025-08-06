@@ -12,6 +12,8 @@ import {
   VERIFY_OTP_REQUEST,
   VERIFY_OTP_SUCCESS,
   VERIFY_OTP_FAILURE,
+  DISABLE_TWO_FACTOR_AUTH_REQUEST,
+  DISABLE_TWO_FACTOR_AUTH_SUCCESS,
 } from "./ActionTypes";
 const initialState = {
   user: null,
@@ -29,6 +31,7 @@ const authReducer = (state = initialState, action) => {
     case LOGIN_REQUEST:
     case GET_USER_REQUEST:
     case VERIFY_OTP_REQUEST:
+    case DISABLE_TWO_FACTOR_AUTH_REQUEST:
       return { ...state, loading: true, error: null };
 
     case REGISTER_SUCCESS:
@@ -43,7 +46,13 @@ const authReducer = (state = initialState, action) => {
       };
 
     case GET_USER_SUCCESS:
-      return { ...state, loading: false, error: null, user: action.payload ,isAuthenticated: true};
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        user: action.payload,
+        isAuthenticated: true,
+      };
 
     case VERIFY_OTP_SUCCESS:
       return {
@@ -52,6 +61,14 @@ const authReducer = (state = initialState, action) => {
         isAuthenticated: true,
         jwt: action.payload.jwt,
         otpEnabled: false,
+        error: null,
+      };
+    case DISABLE_TWO_FACTOR_AUTH_SUCCESS:
+      // When disable succeeds, we only need to stop loading.
+      // The user object will be updated by a subsequent call to getUser().
+      return {
+        ...state,
+        loading: false,
         error: null,
       };
     case REGISTER_FAILURE:

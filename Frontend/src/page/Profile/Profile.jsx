@@ -13,8 +13,19 @@ import { Button } from "@/components/ui/button";
 import AccountVerificationForm from "./AccountVerificationForm"; // Make sure path is correct
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { getUser } from "@/State/Auth/Action"; // Assuming you have this action
+import { disableTwoFactorAuth, getUser } from "@/State/Auth/Action"; // Assuming you have this action
 import { API_BASE_URL } from "@/config/api";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 const Profile = () => {
   const { auth } = useSelector((store) => store);
@@ -61,6 +72,15 @@ const Profile = () => {
       console.error("Failed to verify OTP", err);
     }
   };
+    const handleDisableTwoFactorAuth = async () => {
+        const token = localStorage.getItem("jwt");
+
+        // 1. Dispatch the disable action and wait for it to complete
+        await dispatch(disableTwoFactorAuth(token));
+        
+        // 2. AFTER it succeeds, dispatch getUser to refresh the UI with the updated user data
+        dispatch(getUser(token));
+    };
 
   return (
     <div className="flex flex-col items-center mb-5">
@@ -99,8 +119,6 @@ const Profile = () => {
             <CardHeader className="pb-7">
               <div className="flex items-center gap-3">
                 <CardTitle>2 Step Verification</CardTitle>
-
-                {/* Change 'isEnabled' to 'enabled' in this line */}
                 {auth.user?.twoFactorAuth?.enabled ? (
                   <Badge className={"space-x-2 text-white bg-green-600"}>
                     <VerifiedIcon />
@@ -112,25 +130,48 @@ const Profile = () => {
               </div>
             </CardHeader>
             <CardContent>
+              {/* --- NEW: Conditional logic for the button --- */}
               <div>
-                <Dialog open={open} onOpenChange={setOpen}>
-                  <DialogTrigger asChild>
-                    <Button
-                      onClick={handleEnableTwoStepVerification}
-                      disabled={auth.user?.twoFactorAuth?.enabled}
-                    >
-                      {auth.user?.twoFactorAuth?.enabled
-                        ? "2FA Enabled"
-                        : "Enable Two Step Verification"}
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Verify your account</DialogTitle>
-                    </DialogHeader>
-                    <AccountVerificationForm onSubmit={handleVerifyOtp} />
-                  </DialogContent>
-                </Dialog>
+                {auth.user?.twoFactorAuth?.enabled ? (
+                  // If ENABLED, show the "Disable" button with a confirmation dialog
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button variant="destructive">Disable 2FA</Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Are you absolutely sure?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This will remove an extra layer of security from your
+                          account.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction onClick={handleDisableTwoFactorAuth}>
+                          Yes, Disable 2FA
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                ) : (
+                  // If DISABLED, show the original "Enable" button and dialog
+                  <Dialog open={open} onOpenChange={setOpen}>
+                    <DialogTrigger asChild>
+                      <Button onClick={handleEnableTwoStepVerification}>
+                        Enable Two Step Verification
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Verify your account</DialogTitle>
+                      </DialogHeader>
+                      <AccountVerificationForm onSubmit={handleVerifyOtp} />
+                    </DialogContent>
+                  </Dialog>
+                )}
               </div>
             </CardContent>
           </Card>

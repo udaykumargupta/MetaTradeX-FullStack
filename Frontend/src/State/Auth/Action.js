@@ -1,5 +1,8 @@
 import axios from "axios";
 import {
+  DISABLE_TWO_FACTOR_AUTH_FAILURE,
+  DISABLE_TWO_FACTOR_AUTH_REQUEST,
+  DISABLE_TWO_FACTOR_AUTH_SUCCESS,
   GET_USER_FAILURE,
   GET_USER_REQUEST,
   GET_USER_SUCCESS,
@@ -89,6 +92,34 @@ export const verifyOtp = (otp, id) => async (dispatch) => {
       type: VERIFY_OTP_FAILURE,
       payload: error.response.data.message,
     });
+  }
+};
+
+export const disableTwoFactorAuth = (jwt) => async (dispatch) => {
+  dispatch({ type: DISABLE_TWO_FACTOR_AUTH_REQUEST });
+
+  const baseUrl = import.meta.env.VITE_API_URL;
+
+  try {
+    const response = await axios.patch(
+      `${baseUrl}/api/users/disable-two-factor`,
+      {}, // Empty body for this PATCH request
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      }
+    );
+
+    // Dispatch success action. The payload can be the success message from the server.
+    dispatch({ type: DISABLE_TWO_FACTOR_AUTH_SUCCESS, payload: response.data });
+  } catch (error) {
+    // Dispatch failure action with the error message.
+    dispatch({
+      type: DISABLE_TWO_FACTOR_AUTH_FAILURE,
+      payload: error.message,
+    });
+    console.error("Error disabling 2FA:", error);
   }
 };
 

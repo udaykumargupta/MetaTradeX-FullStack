@@ -134,7 +134,14 @@ public class UserController {
 
     }
 
-
+    @PatchMapping("/api/users/disable-two-factor")
+    public ResponseEntity<String> disableTwoFactorAuth(
+            @RequestHeader("Authorization") String jwt
+    ) throws Exception {
+        User user = userService.findUserProfileByJwt(jwt);
+        userService.disableTwoFactorAuth(user.getId());
+        return ResponseEntity.ok("Two-Factor Authentication has been disabled.");
+    }
 
 
 }

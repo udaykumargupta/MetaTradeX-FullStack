@@ -56,6 +56,23 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public void disableTwoFactorAuth(Long userId) throws Exception {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new Exception("User not found"));
+
+        TwoFactorAuth twoFactorAuth = user.getTwoFactorAuth();
+        if (twoFactorAuth != null) {
+            twoFactorAuth.setEnabled(false);
+            // Since User has a @OneToOne relationship with TwoFactorAuth with cascade,
+            // saving the user will also save the changes to TwoFactorAuth.
+            userRepository.save(user);
+        } else {
+            // Optional: Handle case where 2FA was never configured
+            // but for a disable request, we can just consider the job done.
+            System.out.println("2FA is not configured for this user, nothing to disable.");
+        }
+    }
+    @Override
     public User updatePassword(User user, String newPassword) {
         user.setPassword(newPassword);
         return userRepository.save(user);
