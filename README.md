@@ -2,6 +2,8 @@
 
 MetaTradeX is a cryptocurrency trading platform designed to allow users to buy and sell a variety of crypto coins seamlessly. The platform offers a user-friendly interface, real-time market data, and powerful trading tools to help both novice and experienced traders execute transactions efficiently. With a focus on security, speed, and reliability, MetaTradeX provides a comprehensive environment for crypto enthusiasts to manage their digital assets and stay ahead of market trends.
 
+Live Project link:-https://metatradex.vercel.app/
+
 ## Comprehensive Feature Set
 
 ### AI Chat Bot
@@ -59,9 +61,9 @@ Ensure top-notch security with features like:
 ### Deployment & Infrastructure
 -**Containerization:** Docker
 -**Container Registry:** Docker Hub
--**Backend Hosting:** Render
--**Frontend Hosting:** Netlify
--**Database Hosting:** Neon (PostgreSQL)
+-**Backend Hosting:** Render/Railway.app
+-**Frontend Hosting:** Netlify/vercel.app
+-**Database Hosting:** Neon (PostgreSQL)/ Railway.app (mySQL)
 
 ### Payment Gateways
 - Razorpay
